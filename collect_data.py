@@ -34,21 +34,16 @@ sys.stderr = stderr_file
 
 # This function is to be run if an error is encountered.
 def error(msg):
-
     # Create the output files expected by Snakemake.
     subprocess.run(["touch", snakemake.output.data])
-
     # If the structure has already been loaded, save the modified structure if specified.
     if cmd.count_atoms('all') > 0 and snakemake.config["save_modified_mmcif"]:
         cmd.save(modified_mmcif_dir + eq_class_mem_id + ".cif")
-
     # If the structure has already been loaded, remove the original mmCIF if specified.
     if cmd.count_atoms('all') > 0 and snakemake.config["remove_original_mmcif"]:
         subprocess.run(["rm", original_mmcif_dir + f"{pdb_id}.cif".lower()])
-
     # Print the error message.
     print(msg)
-
     # Close files, reset stdout and stderr, and exit.
     stdout_file.close()
     stderr_file.close()
